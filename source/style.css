@@ -1,0 +1,126 @@
+
+
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+
+
+.main{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1rem;
+    background: url(./bg.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: white;
+}
+
+
+.weeklygoal{
+    width: 30%;
+    height: 10%;
+    font-size: 2.5vw;
+}
+
+.dailyhour{
+    width: 50%;
+    height: 20%;
+}
+
+
+.buttons{
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+    justify-content: space-around;
+}
+
+
+
+
+.hidden{
+    display: none;
+}
+
+.form{
+    background-color: rgba(0, 0, 0, 0.507);
+    color: aliceblue;
+    width: 10%;
+    height: 10%;
+    padding: 1rem;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
+
+.form input{
+    width: 100%;
+    height: 30px;
+    margin: 0 auto;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+}
+
+
+.form button{
+    width: 50%;
+    margin: 0 auto;
+    background-color: transparent;
+    color: #fff;
+    padding: 5px 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+
+.form button:hover{
+    background-color: #fff;
+    color: #000;
+}
+
+
+
+.form .closesign{
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+
+.form .first, .form .secondspan{
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+
+.form .first{
+    left: 0;
+    top: 0;
+    transform: rotate(45deg);
+}
+
+.form .secondspan{
+    right: 0;
+    top: 0;
+    transform: rotate(-45deg);
+}
