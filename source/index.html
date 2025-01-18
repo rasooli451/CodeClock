@@ -6,11 +6,25 @@
     <title>CodeClock</title>
 </head>
 <body>
-    <ul>
-        <li>Home</li>
-        <li>Contact US</li>
-        <li>About us</li>
-        <li>Call us</li>
-    </ul>
+    <div class="main">
+        <div class="weeklygoal"></div>
+        <div class="dailyhour"><span class="hour"></span><span class="minute"></span><span class="second"></span></div>
+        <div class="buttons">
+            <button class="start">Start</button>
+            <button class="reset">reset</button>
+            <button class="save">Save</button>
+            <button class="change">Change Target</button>
+        </div>
+        <p><span class="quote"></span><span class="cursor">&nbsp;</span></p>
+    </div>
+
+    <div class="form hidden">
+        <div class="closesign">
+            <span class="first"></span>
+            <span class="secondspan"></span>
+        </div>
+        <input type="text" id="target" required>
+        <button type="submit">Set Target</button>
+    </div>
 </body>
 </html>
