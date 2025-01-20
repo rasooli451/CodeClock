@@ -11,39 +11,90 @@
 
 
 
-.main{
+body{
     width: 100%;
     height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    gap: 1rem;
-    background: url(./bg.jpg);
+    background:linear-gradient(to right,  #ffffff28,  #ffffff28), url(./bg.jpg); 
     background-position: center;
-    background-size: cover;
+    background-size: cover, cover;
     background-repeat: no-repeat;
     color: white;
 }
 
 
+.main{
+    width: 50%;
+    height: 100vh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    border-radius: 20px;
+    
+}
+
+
 .weeklygoal{
-    width: 30%;
+    width: 100%;
     height: 10%;
-    font-size: 2.5vw;
+    text-align: center;
+    font-size: 2vw;
+}
+
+.target, .leftover{
+    color: #000;
+    font-weight:600;
 }
 
 .dailyhour{
-    width: 50%;
-    height: 20%;
+    width: 100%;
+    height: 65%;
+    border: 2px solid #fff;
+    font-size: 4.2vw;
+    text-align: center;
 }
 
 
 .buttons{
     display: flex;
     flex-wrap: wrap;
-    width: 50%;
+    width: 100%;
+    height: 35%;
     justify-content: space-around;
+}
+
+
+.buttons button{
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #fff;
+}
+
+
+button:enabled:hover{
+    background-color: #fff;
+    color: #000;
+}
+
+button:disabled{
+    cursor: not-allowed;
+}
+
+
+
+.cont{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 15%;
+    gap: 10px;
 }
 
 
@@ -74,13 +125,14 @@
     margin: 0 auto;
     border: none;
     outline: none;
+    padding: 5px;
+    margin-bottom: 10px;
     border-radius: 5px;
 }
 
 
 .form button{
-    width: 50%;
-    margin: 0 auto;
+    width: 100%;
     background-color: transparent;
     color: #fff;
     padding: 5px 5px;
