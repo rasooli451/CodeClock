@@ -11,9 +11,6 @@ import "./style.css";
 
 import Week from "./Week";
 
-let main = document.querySelector(".main");
-let weeklygoal = document.querySelector(".weeklygoal");
-let daily = document.querySelector(".dailyhour");
 let secondspan = document.querySelector(".dailyhour .second");
 let minutespan = document.querySelector(".dailyhour .minute");
 let hourspan = document.querySelector(".dailyhour .hour");
@@ -30,16 +27,15 @@ let input = document.querySelector(".form input");
 let targetspan = document.querySelector(".weeklygoal .target");
 let leftoverspan = document.querySelector(".weeklygoal .leftover");
 
-let stillintheweek = false;
 let weekwasted = false;
 
+let Months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
 
 let past = 0;
 let starttime = 0;
 let running = false;
 
-localStorage.clear();
 
 if (localStorage.length === 0){
     startbtn.disabled = "true";
@@ -52,44 +48,49 @@ if (localStorage.length === 0){
 }
 else{
     let week = JSON.parse(localStorage.getItem("Week"));
-    let lastmonday = week.Mondaydate;
-    changebtn.textContent = "Change Target";
-    let todaydate = new Date();
-    let diff = dateDiffInDays(lastmonday, todaydate);
-    if (diff >= 7){
-        stillintheweek = false;
+    if (!stillIntheWeek()){
         if (week.target > 0){
             targetspan.textContent = "Week Wasted";
-            let temp = Number(week.target) + week.leftover;
+            let temp = week.target + week.leftover;
             week.leftover = temp;
-            leftoverspan.textContent = temp;
+            leftoverspan.textContent = temp.toFixed(2);
             weekwasted = true;
         }
         else{
             targetspan.textContent = "Goal accomplished!";
-            leftoverspan.textContent = (week.leftover === 0) ? "No Leftovers" : week.leftover + "hrs";
+            leftoverspan.textContent = (week.leftover === 0) ? "No Leftovers!" : week.leftover.toFixed(2) + "hrs";
             weekwasted = false;
+        }
+        if (week.leftover <= 0){
+            startbtn.disabled = "true";
         }
     }
     else{
-        targetspan.textContent = week.target + "hrs";
-        leftoverspan.textContent = week.leftover + "hrs";
-        stillintheweek = true;
+        if (week.target < 0){
+            targetspan.textContent = "Goal Accomplished!";
+        }
+        else{
+            targetspan.textContent = week.target.toFixed(2) + "hrs";
+        }
+        if (week.leftover < 0){
+            leftoverspan.textContent = "No Leftovers!";
+        }
+        else{
+            leftoverspan.textContent = week.leftover.toFixed(2) + "hrs";
+        }
+        
     }
-    //targetspan.textContent = arr[0] + "hrs";
-    //leftoverspan.textContent = arr[1] + "hrs";
-    //console.log(localStorage);
+    localStorage.setItem("Week", JSON.stringify(week));
 }
 
 
 changebtn.addEventListener("click", ()=>{
-    form.classList.remove("hidden");
-    /*if (isMonday()){
+    if (isMonday()){
         form.classList.remove("hidden");
     }
     else{
-        console.error("Not Monday, you can't change your weekly target now!!");
-    }*/
+        alert("Not Monday, you can't change your weekly target now!");
+    }
 })
 
 closesign.addEventListener("click", ()=>{
@@ -100,18 +101,22 @@ closesign.addEventListener("click", ()=>{
 
 
 sbmtbtn.addEventListener("click", ()=>{
-    const regex = new RegExp(/[^0-9]/, 'g');
-    if (!input.value.match(regex) && input.value.length > 0){
+    const regex = new RegExp(/^\d+(\.\d{1,2})?$/, 'g');
+    if (input.value.match(regex) && input.value.length > 0){
         form.classList.add("hidden");
+        let today;
+        changebtn.textContent = "Change Target";
         if (localStorage.length === 0){
-            localStorage.setItem("Week", JSON.stringify(new Week(new Date(), input.value, 0)));
+            today = new Date();
+            localStorage.setItem("Week", JSON.stringify(new Week(today.getTime(), Number(input.value), 0)));
             targetspan.textContent = input.value + "hrs";
             leftoverspan.textContent = "0hrs";
         }
         else{
             let week = JSON.parse(localStorage.getItem("Week"));
-            week.target = input.value;
-            week.Mondaydate = new Date();
+            week.target = Number(input.value);
+            week.Mondaydate = new Date().getTime();
+            today = new Date(week.Mondaydate);
             localStorage.setItem("Week", JSON.stringify(week));
             targetspan.textContent = week.target + "hrs";
             leftoverspan.textContent = week.leftover + "hrs";
@@ -119,15 +124,82 @@ sbmtbtn.addEventListener("click", ()=>{
         input.value = "";
         startbtn.removeAttribute("disabled");
         resetbtn.removeAttribute("disabled");
-        savebtn.removeAttribute("disabled");
+        weektitle.textContent = "Week Of " + Months[today.getMonth()] + " " + today.getDate();
     }
     else{
-        console.log(false);
+        alert("Input should be a number!!");
     }
 })
 
 
 
+
+savebtn.addEventListener("click", ()=>{
+    let week = JSON.parse(localStorage.getItem("Week"));
+    let hours = Number(hourspan.textContent);
+    let minutes = Number(minutespan.textContent);
+    let seconds = Number(secondspan.textContent);
+    let total = hours * 3600 + minutes * 60 + seconds;
+    if (stillIntheWeek()){
+        let totaltarget = week.target * 3600;
+        if (totaltarget > 0){
+            calculateLeft(targetspan, totaltarget, total, week);
+        }
+        else{
+            let leftovers = week.leftover;
+            let totalleftover = leftovers * 3600;
+            if (totalleftover > 0){
+                 calculateLeft(leftoverspan, totalleftover, total, week);
+            }
+            else{
+                alert("You have done enough!!");
+            }
+        }
+    }
+    else{
+        let leftovers = week.leftover;
+        let totalleftover = leftovers * 3600;
+        calculateLeft(leftoverspan, totalleftover, total, week);
+        if (week.leftover <= 0){
+            startbtn.disabled = "true";
+        }
+    }
+    localStorage.setItem("Week", JSON.stringify(week));
+    Reset();
+
+})
+
+
+function calculateLeft(what, remainingtarget, userwork, week){
+    let secondsleft = remainingtarget - userwork;
+    let hoursleft = secondsleft / 3600;
+    if (secondsleft <= 0){
+        what.textContent = what.classList.contains("target") ? "Goal Accomplished!" : "No Leftovers!";
+    }   
+    else{
+        what.textContent = hoursleft.toFixed(2) + "hrs";
+    }
+    if (what.classList.contains("target")){
+        week.target = hoursleft;
+    }
+    else{
+        week.leftover = hoursleft;
+    }
+}
+
+function stillIntheWeek(){
+    let week = JSON.parse(localStorage.getItem("Week"));
+    let lastmonday = new Date(week.Mondaydate);
+    let todaydate = new Date();
+    let diff = dateDiffInDays(lastmonday, todaydate);
+    if (diff >= 7){
+        return false;
+    }
+    else{
+        return true;
+    }
+
+}
 
 
 function isMonday(){
@@ -153,14 +225,21 @@ startbtn.addEventListener("click", ()=>{
         startbtn.textContent = "Pause";
         starttime = new Date();
     }
+    savebtn.removeAttribute("disabled");
 })
 
 resetbtn.addEventListener("click", ()=>{
+    Reset();
+})
+
+
+
+function Reset(){
     past = 0;
     running = false;
     startbtn.textContent = "Start";
-})
-
+    savebtn.disabled = "true";
+}
 
 
 
@@ -191,14 +270,14 @@ setInterval(function(){
     let m=Math.floor(total/60000);
     total-=m*60000;
     hourspan.textContent = formatstring(h);
-    minutespan.textContent = ':'+m.toFixed(0).padStart(2,'0');
-    secondspan.textContent = ':'+(total/1000).toFixed(2).padStart(5,'0');
+    minutespan.textContent = "" + m.toFixed(0).padStart(2,'0');
+    secondspan.textContent = "" + (total/1000).toFixed(2).padStart(5,'0');
   }, 70);
 
 
 
 
-//console.log(localStorage);
+
 
 
 function dateDiffInDays(a, b) {
@@ -213,7 +292,7 @@ function dateDiffInDays(a, b) {
 
 
   
-console.log(localStorage);
+
 
 
 
