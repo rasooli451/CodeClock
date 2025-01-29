@@ -37,7 +37,7 @@ let starttime = 0;
 let running = false;
 
 
-if (localStorage.length === 0){
+if (localStorage.getItem("Week") === null){
     startbtn.disabled = "true";
     resetbtn.disabled = "true";
     savebtn.disabled = "true";
@@ -106,7 +106,7 @@ sbmtbtn.addEventListener("click", ()=>{
         form.classList.add("hidden");
         let today;
         changebtn.textContent = "Change Target";
-        if (localStorage.length === 0){
+        if (localStorage.getItem("Week") === null){
             today = new Date();
             localStorage.setItem("Week", JSON.stringify(new Week(today.getTime(), Number(input.value), 0)));
             targetspan.textContent = input.value + "hrs";
