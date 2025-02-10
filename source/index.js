@@ -118,7 +118,7 @@ sbmtbtn.addEventListener("click", ()=>{
             week.Mondaydate = new Date().getTime();
             today = new Date(week.Mondaydate);
             localStorage.setItem("Week", JSON.stringify(week));
-            targetspan.textContent = week.target + "hrs";
+            targetspan.textContent = week.target.toFixed(2) + "hrs";
             leftoverspan.textContent = week.leftover.toFixed(2) + "hrs";
         }
         input.value = "";
