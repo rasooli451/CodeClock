@@ -53,7 +53,7 @@ else{
             targetspan.textContent = "Week Wasted";
             let temp = week.target + week.leftover;
             week.leftover = temp;
-            leftoverspan.textContent = temp.toFixed(2);
+            leftoverspan.textContent = temp.toFixed(2) + "hrs";
             weekwasted = true;
         }
         else{
@@ -79,7 +79,8 @@ else{
             leftoverspan.textContent = week.leftover.toFixed(2) + "hrs";
         }
     }
-    weektitle.textContent = "Week Of " + Months[today.getMonth()] + " " + new Week(week.Mondaydate);
+    let today = new Date(week.Mondaydate);
+    weektitle.textContent = "Week Of " + Months[today.getMonth()] + " " + today.getDate();
     localStorage.setItem("Week", JSON.stringify(week));
 }
 
