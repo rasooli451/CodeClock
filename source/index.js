@@ -78,8 +78,8 @@ else{
         else{
             leftoverspan.textContent = week.leftover.toFixed(2) + "hrs";
         }
-        
     }
+    weektitle.textContent = "Week Of " + Months[today.getMonth()] + " " + new Week(week.Mondaydate);
     localStorage.setItem("Week", JSON.stringify(week));
 }
 
@@ -119,7 +119,7 @@ sbmtbtn.addEventListener("click", ()=>{
             today = new Date(week.Mondaydate);
             localStorage.setItem("Week", JSON.stringify(week));
             targetspan.textContent = week.target + "hrs";
-            leftoverspan.textContent = week.leftover + "hrs";
+            leftoverspan.textContent = week.leftover.toFixed(2) + "hrs";
         }
         input.value = "";
         startbtn.removeAttribute("disabled");
