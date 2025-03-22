@@ -46,7 +46,7 @@ body{
 
 .weeklygoal{
     text-align: center;
-    font-size: min(34px, 3vw);
+    font-size: min(33px, 3vw);
 }
 
 .target, .leftover{
