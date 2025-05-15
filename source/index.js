@@ -31,8 +31,10 @@ let weekwasted = false;
 
 let Months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
-
 let past = 0;
+if (localStorage.getItem("SavedTime") != null && localStorage.getItem("SavedTime").length > 0){
+    past = Number(localStorage.getItem("SavedTime"));
+}
 let starttime = 0;
 let running = false;
 
@@ -51,8 +53,15 @@ else{
     if (!stillIntheWeek()){
         if (week.target > 0){
             targetspan.textContent = "Week Wasted";
-            let temp = week.target + week.leftover;
-            week.leftover = temp;
+            let temp = 0;
+            if (!week.leftoverAdded){
+                temp = week.target + week.leftover;
+                week.leftover = temp;
+                week.leftoverAdded = true;
+                }
+            else{
+                temp = week.leftover;
+            }
             leftoverspan.textContent = temp.toFixed(2) + "hrs";
             weekwasted = true;
         }
@@ -109,7 +118,7 @@ sbmtbtn.addEventListener("click", ()=>{
         changebtn.textContent = "Change Target";
         if (localStorage.getItem("Week") === null){
             today = new Date();
-            localStorage.setItem("Week", JSON.stringify(new Week(today.getTime(), Number(input.value), 0)));
+            localStorage.setItem("Week", JSON.stringify(new Week(today.getTime(), Number(input.value), 0, false)));
             targetspan.textContent = input.value + "hrs";
             leftoverspan.textContent = "0hrs";
         }
@@ -140,6 +149,7 @@ savebtn.addEventListener("click", ()=>{
     let hours = Number(hourspan.textContent);
     let minutes = Number(minutespan.textContent);
     let seconds = Number(secondspan.textContent);
+    localStorage.setItem("SavedTime", "");
     let total = hours * 3600 + minutes * 60 + seconds;
     if (stillIntheWeek()){
         let totaltarget = week.target * 3600;
@@ -220,6 +230,7 @@ startbtn.addEventListener("click", ()=>{
         startbtn.textContent = "Start";
         let now = new Date();
         past += now - starttime;
+        localStorage.setItem("SavedTime", String(past));
     }
     else{
         running = true;
@@ -240,6 +251,7 @@ function Reset(){
     running = false;
     startbtn.textContent = "Start";
     savebtn.disabled = "true";
+    localStorage.setItem("SavedTime", "");
 }
 
 
