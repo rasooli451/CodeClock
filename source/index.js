@@ -231,6 +231,7 @@ startbtn.addEventListener("click", ()=>{
         let now = new Date();
         past += now - starttime;
         localStorage.setItem("SavedTime", String(past));
+        alert("Progress Saved, you can now resume again!!");
     }
     else{
         running = true;
